@@ -17,20 +17,23 @@
 - Регистрация и вход пользователей с использованием JWT.
 - Получение и отображение данных о рекламе.
 - API конечные точки защищены аутентификацией JWT.
+- Автоматически сгенерированная документация API (Swagger и ReDoc).
 
 ## Как Запустить Приложение
 
 ### Необходимые Условия
-
-- Docker
-- Docker Compose
+- Без Docker
+- 
+- С Docker
+  - Docker
+  - Docker Compose
 
 ### Шаги
 
 1. **Клонировать Репозиторий**:
     ```bash
-    git clone <URL репозитория>
-    cd <директория репозитория>
+    git clone https://github.com/atomsis/Farpost-API-for-advertisement-.git
+    cd farpost
     ```
 
 2. **Собрать и Запустить Docker Контейнер**:
@@ -40,40 +43,48 @@
 
 3. **Запустить Миграции и Собрать Статические Файлы**:
     ```bash
-    docker-compose exec web python manage.py migrate
-    docker-compose exec web python manage.py collectstatic --noinput
+    python manage.py migrate
+    python manage.py collectstatic --noinput
     ```
 
 4. **Доступ к Приложению**:
-    Откройте браузер и перейдите по адресу `http://localhost:8000`.
+    Откройте браузер и перейдите по адресу `http://localhost:8000/api/ad/`.
 
 ### Использование Приложения
 
 - **Регистрация**:
-    Для регистрации нового пользователя отправьте POST запрос на `/api/auth/register/` с полями `username`, `email` и `password`.
+    Для регистрации нового пользователя отправьте POST запрос на `/auth/registration/` с полями `username`, `email` и `password`. Пример запроса:
+    ```json
+    {
+        "username": "your_username",
+        "email": "your_email@example.com",
+        "password1": "your_password",
+        "password2": "your_password"
+    }
+    ```
 
 - **Вход**:
-    Для входа пользователя отправьте POST запрос на `/api/auth/login/` с полями `username` и `password`. В ответе будет предоставлен токен JWT, который необходимо включать в заголовок `Authorization` всех последующих запросов в формате `Bearer <token>`.
+    Для входа пользователя отправьте POST запрос на `/auth/login/` с полями `username` и `password`. Пример запроса:
+    ```json
+    {
+        "username": "your_username",
+        "password": "your_password"
+    }
+    ```
+    В ответе будет предоставлен токен JWT, который необходимо включать в заголовок `Authorization` всех последующих запросов в формате `Bearer <token>`.
 
 - **API Конечные Точки**:
-    - `/api/ads/` - Список реклам (требуется аутентификация).
-    - `/api/ads/<id>/` - Подробная информация о рекламе (требуется аутентификация).
+    - `/api/ad/` - Список реклам (не требуется аутентификация).
+    - `/api/ad/<id>/` - Подробная информация о рекламе (требуется аутентификация).
 
-### Использование Приложения
-
-- **API Конечные Точки**:
-    - `/api/v1/ads/` - Список реклам.
-    - `/api/v1/ads/<id>/` - Подробная информация о рекламе.
-
-- **Аутентификация**:
-    - `/api/v1/auth/login/` - Вход пользователя.
-    - `/api/v1/auth/registration/` - Регистрация пользователя.
-
+- **Документация API**:
+    - Swagger: `http://localhost:8000/swagger/`
+    - ReDoc: `http://localhost:8000/redoc/`
 ### Запуск Тестов
 
 Для запуска тестов используйте следующую команду:
 ```bash
-docker-compose exec web python manage.py test
+python manage.py test
 ```
 
 ### Структура Проекта
