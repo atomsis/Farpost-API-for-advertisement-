@@ -16,12 +16,15 @@ class AdvertisementDetailAPIView(generics.RetrieveAPIView):
         try:
             ad = Advertisement.objects.get(advertisement_id=advertisement_id)
         except Advertisement.DoesNotExist:
-            raise NotFound("Ad not found")
+            raise NotFound("Advertisement not found")
 
         serializer = self.get_serializer(ad)
         return Response(serializer.data)
 
 
+
+######################################################################
+# Тут я ещё добавил дженерик на Список всех(в вашем ТЗ=10) объявлений (потому что там где "кокретный" там и "все")
 class AdvertisementListView(generics.ListAPIView):
-    queryset = Advertisement.objects.all()
+    queryset = Advertisement.objects.all()[:10]
     serializer_class = AdvertisementSerializer
